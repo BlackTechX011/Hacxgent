@@ -297,9 +297,7 @@ For comprehensive information and detailed guides, please refer to the following
 *   [**Memory Management**](MEMORY_MANAGEMENT.md): Dive deep into Hacxgent's unique context compaction architecture.
 *   [**Contribution Guidelines**](CONTRIBUTING.md): How to get involved and extend Hacxgent.
 
-## Contributing & Telemetry
-
-Hacxgent is built for privacy. All Telemetry Removed, No Telemetry, Nothing.
+## Contributing 
 
 We welcome contributions! Please see `CONTRIBUTING.md` for guidelines on adding tools, improving memory management, or fixing bugs.
 
