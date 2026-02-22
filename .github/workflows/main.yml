@@ -6,14 +6,14 @@ on:
       - 'v*'
     paths:
       - 'pyproject.toml'
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering from the Actions tab
 
 jobs:
   build-n-publish:
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
     
-    # REQUIRED for PyPI Trusted Publishing
+    # REQUIRED for PyPI Trusted Publishing (OIDC)
     permissions:
       contents: read
       id-token: write
@@ -35,6 +35,6 @@ jobs:
       run: uv build
 
     - name: Publish to PyPI
-      if: startsWith(github.ref, 'refs/tags/v')
+      # This line now allows BOTH manual runs AND tag pushes
+      if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
       uses: pypa/gh-action-pypi-publish@release/v1
-  
