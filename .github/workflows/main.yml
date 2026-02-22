@@ -12,6 +12,8 @@ jobs:
   build-n-publish:
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
+    
+    # REQUIRED for PyPI Trusted Publishing
     permissions:
       contents: read
       id-token: write
@@ -25,7 +27,7 @@ jobs:
         python-version: '3.12'
 
     - name: Install uv
-      uses: astral-sh/setup-uv-action@v5
+      uses: astral-sh/setup-uv@v5
       with:
         version: "latest"
 
@@ -35,8 +37,4 @@ jobs:
     - name: Publish to PyPI
       if: startsWith(github.ref, 'refs/tags/v')
       uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        # Use Trusted Publishing (recommended)
-        # Ensure you've configured this on PyPI: 
-        # https://docs.pypi.org/trusted-publishers/using-a-publisher/
-        password: ${{ secrets.PYPI_API_TOKEN }}
+  
