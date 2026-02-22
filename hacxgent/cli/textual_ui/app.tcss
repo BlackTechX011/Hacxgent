@@ -1,0 +1,941 @@
+$hacxgent_blue: #00BFFF;
+
+* {
+    scrollbar-color: ansi_black;
+    scrollbar-color-hover: ansi_bright_black;
+    scrollbar-color-active: ansi_bright_black;
+    scrollbar-background: transparent;
+    scrollbar-background-hover: transparent;
+    scrollbar-background-active: transparent;
+    scrollbar-size: 1 1;
+}
+
+Screen {
+    background: transparent;
+}
+
+Horizontal {
+    width: 100%;
+    height: auto;
+}
+
+TextArea > .text-area--cursor {
+    color: ansi_default;
+}
+
+#chat {
+    layout: stream;
+    height: 1fr;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+}
+
+#loading-area {
+    height: auto;
+    width: 100%;
+    background: transparent;
+    padding: 1 0 0 0;
+    layout: horizontal;
+    align: left middle;
+}
+
+#loading-area-content {
+    width: 1fr;
+    height: auto;
+    align: left middle;
+}
+
+#bottom-app-container,
+#input-container {
+    height: auto;
+    width: 100%;
+    background: transparent;
+}
+
+#bottom-bar {
+    height: auto;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+    align: left middle;
+    layout: horizontal;
+}
+
+#spacer {
+    width: 1fr;
+    height: auto;
+    background: transparent;
+}
+
+#messages {
+    layout: stream;
+    width: 100%;
+    height: auto;
+    text-align: left;
+    margin-top: 1;
+    margin-bottom: 0;
+}
+
+#input-container {
+    padding: 0;
+    margin: 0;
+}
+
+#completion-popup {
+    width: 100%;
+    padding: 1;
+    color: ansi_default;
+}
+
+#input-box {
+    height: auto;
+    width: 100%;
+    background: transparent;
+    border: solid ansi_bright_black;
+    border-title-align: right;
+    border-title-color: ansi_bright_black;
+    padding: 0 1;
+
+    &.border-warning {
+        border: solid ansi_yellow;
+        border-title-color: ansi_yellow;
+    }
+
+    &.border-safe {
+        border: solid ansi_green;
+        border-title-color: ansi_green;
+    }
+
+    &.border-error {
+        border: solid ansi_red;
+        border-title-color: ansi_red;
+    }
+}
+
+#input-body {
+    height: auto;
+}
+
+#prompt {
+    width: auto;
+    background: transparent;
+    color: $hacxgent_blue;
+    text-style: bold;
+    padding: 0 1 0 0;
+}
+
+#input {
+    width: 1fr;
+    height: auto;
+    min-height: 3;
+    max-height: 50vh;
+    background: transparent;
+    color: ansi_default;
+    border: none;
+    padding: 0;
+    scrollbar-visibility: hidden;
+}
+
+ToastRack {
+    align: left bottom;
+    padding: 0;
+    margin: 0 0 6 0;
+}
+
+Markdown {
+    color: ansi_default;
+
+    .code_inline {
+        color: ansi_default;
+        background: ansi_bright_black;
+    }
+
+    MarkdownFence {
+        overflow-x: auto;
+        scrollbar-size-horizontal: 1;
+        max-width: 95%;
+        background: transparent;
+
+        & > Label {
+            padding: 0;
+        }
+    }
+
+    MarkdownTable {
+        background: transparent;
+    }
+
+    MarkdownBlockQuote {
+        background: transparent;
+        border-left: outer ansi_bright_black;
+    }
+
+    MarkdownBullet,
+    MarkdownBulletList,
+    MarkdownOrderedList {
+        color: ansi_default;
+    }
+}
+
+.user-message {
+    margin-top: 1;
+    width: 100%;
+    height: auto;
+
+    &.pending {
+        .user-message-prompt,
+        .user-message-content {
+            opacity: 0.7;
+            text-style: italic;
+        }
+    }
+}
+
+.user-message-container {
+    width: 100%;
+    height: auto;
+}
+
+.user-message-prompt {
+    width: auto;
+    height: 100%;
+    text-style: bold;
+}
+
+.user-message-content {
+    width: 1fr;
+    height: auto;
+    text-style: bold;
+    padding-left: 1;
+    border-left: heavy $hacxgent_blue;
+    color: $hacxgent_blue;
+}
+
+.assistant-message {
+    layout: stream;
+    margin-top: 1;
+    width: 100%;
+    height: auto;
+
+    Markdown {
+        width: 100%;
+        height: auto;
+        padding: 0;
+        margin: 0;
+
+        & > *:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.reasoning-message {
+    margin-top: 1;
+    width: 100%;
+    height: auto;
+}
+
+.reasoning-message-wrapper,
+.reasoning-message-header {
+    width: 100%;
+    height: auto;
+}
+
+.reasoning-indicator {
+    width: auto;
+    height: auto;
+    color: ansi_bright_black;
+    margin-right: 1;
+
+    &.success {
+        color: ansi_green;
+    }
+}
+
+.reasoning-collapsed-text,
+.reasoning-triangle {
+    width: auto;
+    height: auto;
+    color: ansi_bright_black;
+    text-style: italic;
+}
+
+.reasoning-triangle {
+    margin-left: 1;
+}
+
+.reasoning-message-content {
+    layout: stream;
+    width: 100%;
+    height: auto;
+    padding: 0 0 0 2;
+    margin: 0;
+    color: ansi_bright_black;
+    text-style: italic;
+
+    * {
+        color: ansi_bright_black;
+        text-style: italic;
+    }
+
+    & > *:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.interrupt-message,
+.error-message,
+.warning-message,
+.user-command-message {
+    margin-top: 0;
+    margin-bottom: 0;
+    height: auto;
+    width: 100%;
+}
+
+.interrupt-container,
+.error-container,
+.warning-container,
+.user-command-container {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.interrupt-border,
+.error-border,
+.warning-border,
+.user-command-border {
+    width: auto;
+    height: 100%;
+    padding: 0 1 0 2;
+    color: ansi_bright_black;
+}
+
+.interrupt-content {
+    width: 1fr;
+    height: auto;
+    margin: 0;
+    color: ansi_yellow;
+}
+
+.error-content {
+    width: 1fr;
+    height: auto;
+    margin: 0;
+    color: ansi_red;
+    text-style: bold;
+}
+
+.warning-content {
+    width: 1fr;
+    height: auto;
+    margin: 0;
+    color: ansi_yellow;
+}
+
+.user-command-content {
+    width: 1fr;
+    height: auto;
+    margin: 0;
+
+    Markdown {
+        margin: 0;
+        padding: 0;
+
+        & > *:first-child {
+            margin-top: 0;
+        }
+
+        & > *:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.bash-output-message {
+    margin-top: 1;
+    width: 100%;
+    height: auto;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+.bash-command-line {
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.bash-prompt {
+    width: auto;
+    height: auto;
+
+    &.bash-success {
+        color: ansi_green;
+    }
+
+    &.bash-error {
+        color: ansi_red;
+    }
+}
+
+.bash-command {
+    width: 1fr;
+    height: auto;
+}
+
+.bash-output-container {
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.bash-output-border {
+    width: auto;
+    height: 100%;
+    padding: 0 1 0 2;
+    color: ansi_bright_black;
+}
+
+.bash-output {
+    width: 1fr;
+    height: auto;
+}
+
+.unknown-event {
+    height: auto;
+    color: ansi_bright_black;
+}
+
+StatusMessage {
+    width: 100%;
+    height: auto;
+
+    Horizontal {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.status-indicator-icon {
+    width: auto;
+    height: auto;
+    color: ansi_default;
+    margin-right: 1;
+
+    &.success {
+        color: ansi_green;
+    }
+
+    &.error {
+        color: ansi_red;
+    }
+}
+
+.status-indicator-text {
+    width: 1fr;
+    height: auto;
+    color: ansi_default;
+}
+
+.compact-message,
+.tool-call {
+    width: 100%;
+    height: auto;
+    margin-top: 1;
+}
+
+.tool-call.no-gap {
+    margin-top: 0;
+}
+
+.tool-call-container {
+    width: 100%;
+    height: auto;
+}
+
+.tool-stream-message {
+    width: 100%;
+    height: auto;
+    color: ansi_bright_black;
+    padding-left: 2;
+}
+
+.tool-result {
+    width: 100%;
+    height: auto;
+    margin-top: 0;
+    margin-left: 0;
+    padding: 0;
+    background: transparent;
+    color: ansi_default;
+
+    &.error-text {
+        color: ansi_red;
+    }
+
+    &.warning-text {
+        color: ansi_yellow;
+    }
+}
+
+.tool-result-container {
+    width: 100%;
+    height: auto;
+    margin-top: 0;
+    padding: 0;
+}
+
+.tool-result-border {
+    width: auto;
+    height: 100%;
+    padding: 0 1 0 2;
+    color: ansi_bright_black;
+}
+
+.tool-result-content {
+    width: 1fr;
+    height: auto;
+    padding: 0;
+}
+
+.tool-call-widget,
+.tool-result-widget {
+    width: 100%;
+    height: auto;
+    color: ansi_default;
+}
+
+.tool-result-widget Static {
+    height: auto;
+}
+
+.tool-call-detail,
+.tool-result-detail {
+    height: auto;
+    color: ansi_bright_black;
+}
+
+.tool-result-detail {
+    margin-top: 0;
+}
+
+.tool-result-error {
+    color: ansi_red;
+}
+
+.tool-result-warning {
+    color: ansi_yellow;
+}
+
+.diff-header {
+    height: auto;
+    color: ansi_bright_black;
+    text-style: bold;
+}
+
+.diff-removed {
+    height: auto;
+    color: ansi_red;
+}
+
+.diff-added {
+    height: auto;
+    color: ansi_green;
+}
+
+.diff-range {
+    height: auto;
+    color: ansi_blue;
+}
+
+.diff-context {
+    height: auto;
+    color: ansi_bright_black;
+}
+
+.todo-empty,
+.todo-cancelled {
+    height: auto;
+    color: ansi_bright_black;
+}
+
+.todo-pending {
+    height: auto;
+    color: ansi_default;
+}
+
+.todo-in_progress {
+    height: auto;
+    color: ansi_yellow;
+}
+
+.todo-completed {
+    height: auto;
+    color: ansi_green;
+}
+
+.loading-widget {
+    width: 100%;
+    height: auto;
+    color: ansi_bright_black;
+}
+
+.loading-container,
+.loading-indicator,
+.loading-status,
+.loading-hint {
+    width: auto;
+    height: auto;
+}
+
+.loading-indicator {
+    margin-right: 1;
+}
+
+.loading-status {
+    width: auto;
+    height: auto;
+}
+
+.loading-char {
+    width: auto;
+    height: auto;
+}
+
+.loading-hint {
+    width: auto;
+    height: auto;
+    color: $foreground;
+}
+
+.history-load-more-message {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    content-align: center middle;
+    margin: 1 0;
+}
+
+.history-load-more-container {
+    width: 100%;
+    height: auto;
+    content-align: center middle;
+}
+
+.history-load-more-button {
+    background: transparent;
+    border: none;
+    color: ansi_yellow;
+    text-style: bold;
+    padding: 1;
+}
+
+.history-load-more-button:hover {
+
+}
+
+#config-app {
+    width: 100%;
+    height: auto;
+    background: transparent;
+    border: solid ansi_bright_black;
+    padding: 0 1;
+    margin: 0;
+}
+
+#config-content {
+    width: 100%;
+    height: auto;
+}
+
+.settings-title {
+    height: auto;
+    text-style: bold;
+    color: ansi_blue;
+}
+
+.settings-option {
+    height: auto;
+    color: ansi_default;
+}
+
+.settings-cursor-selected {
+    color: ansi_blue;
+    text-style: bold;
+}
+
+.settings-label-selected {
+    color: ansi_default;
+    text-style: bold;
+}
+
+.settings-value-toggle-on-selected {
+    color: ansi_green;
+    text-style: bold;
+}
+
+.settings-value-toggle-on-unselected {
+    color: ansi_green;
+}
+
+.settings-value-toggle-off {
+    color: ansi_bright_black;
+}
+
+.settings-value-cycle-selected {
+    color: ansi_blue;
+    text-style: bold;
+}
+
+.settings-value-cycle-unselected {
+    color: ansi_blue;
+}
+
+.settings-help {
+    height: auto;
+    color: ansi_bright_black;
+}
+
+#approval-app {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    background: transparent;
+    border: solid ansi_bright_black;
+    padding: 0 1;
+    margin: 0;
+}
+
+#approval-options {
+    width: 100%;
+    height: auto;
+    dock: bottom;
+}
+
+#approval-content {
+    width: 100%;
+    height: auto;
+}
+
+.approval-tool-info-scroll {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+}
+
+.approval-title {
+    height: auto;
+    text-style: bold;
+    color: ansi_yellow;
+}
+
+.approval-tool-info-container {
+    width: 100%;
+    height: auto;
+}
+
+.tool-approval-widget {
+    width: 100%;
+    height: auto;
+
+    Static,
+    Vertical {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.approval-option {
+    height: auto;
+    color: ansi_default;
+}
+
+.approval-cursor-selected {
+    &.approval-option-yes {
+        color: ansi_green;
+        text-style: bold;
+    }
+
+    &.approval-option-no {
+        color: ansi_red;
+        text-style: bold;
+    }
+}
+
+.approval-option-selected {
+    &.approval-option-yes {
+        color: ansi_green;
+    }
+
+    &.approval-option-no {
+        color: ansi_red;
+    }
+}
+
+.approval-help {
+    height: auto;
+    color: ansi_bright_black;
+}
+
+.approval-description {
+    height: auto;
+    color: ansi_default;
+}
+
+.code-block {
+    height: auto;
+    color: ansi_default;
+    background: transparent;
+    padding: 1;
+}
+
+#question-app {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    background: transparent;
+    border: solid ansi_bright_black;
+    padding: 0 1;
+    margin: 0;
+}
+
+#question-content {
+    width: 100%;
+    height: auto;
+}
+
+.question-tabs {
+    height: auto;
+    color: ansi_blue;
+    margin-bottom: 1;
+}
+
+.question-title {
+    height: auto;
+    text-style: bold;
+    color: ansi_blue;
+    margin-bottom: 1;
+}
+
+.question-option {
+    height: auto;
+    color: ansi_default;
+}
+
+.question-option-selected {
+    color: ansi_blue;
+    text-style: bold;
+}
+
+.question-other-row {
+    width: 100%;
+    height: auto;
+}
+
+.question-other-prefix {
+    width: auto;
+    height: auto;
+    color: ansi_default;
+}
+
+.question-other-input {
+    width: 1fr;
+    height: auto;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.question-other-static {
+    width: auto;
+    height: auto;
+    color: ansi_bright_black;
+}
+
+.question-submit {
+    height: auto;
+    color: ansi_default;
+    margin-top: 1;
+}
+
+.question-help {
+    height: auto;
+    color: ansi_bright_black;
+    margin-top: 1;
+}
+
+ExpandingBorder {
+    width: auto;
+    height: 100%;
+    content-align: left bottom;
+}
+
+PathDisplay,
+ContextProgress {
+    width: auto;
+    height: auto;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    color: ansi_bright_black;
+}
+
+#banner-container {
+    align: left middle;
+    padding: 0 1 0 0;
+    width: auto;
+}
+
+#banner-info {
+    width: auto;
+    height: auto;
+    margin-left: 2;
+    content-align: left middle;
+}
+
+.banner-line {
+    width: auto;
+    height: auto;
+}
+
+#banner-animation {
+    width: auto;
+    height: auto;
+    color: #00FF00;
+}
+
+#banner-brand {
+    color: $hacxgent_blue;
+    text-style: bold;
+    width: auto;
+}
+
+.banner-spacer {
+    width: 1;
+    color: transparent;
+}
+
+.banner-meta {
+    color: ansi_default;
+    width: auto;
+}
+
+#banner-model {
+    color: ansi_cyan;
+    width: auto;
+}
+
+#banner-meta-counts {
+    width: auto;
+}
+
+.banner-cmd {
+    color: ansi_cyan;
+    width: auto;
+}

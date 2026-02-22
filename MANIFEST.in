@@ -1,0 +1,22 @@
+# Include documentation files
+graft DOCS
+include README.md
+include MEMORY_MANAGEMENT.md
+include TODO.md
+include LICENSE
+
+# Include GitHub templates
+graft .github
+
+# Include all prompt files for tools
+recursive-include hacxgent/core/prompts *.md
+recursive-include hacxgent/core/tools/builtins/prompts *.md
+
+# Exclude user-specific or temporary files
+prune .hacx
+prune .hacx_history
+prune Test
+prune HacxGPT-CLI
+prune tests
+prune __pycache__
+global-exclude *.py[cod]

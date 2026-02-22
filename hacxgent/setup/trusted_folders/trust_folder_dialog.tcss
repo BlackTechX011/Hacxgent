@@ -1,0 +1,83 @@
+Screen {
+    align: center middle;
+    background: transparent 80%;
+}
+
+#trust-dialog {
+    width: 70;
+    max-width: 90%;
+    min-width: 50;
+    height: auto;
+    border: round ansi_bright_black;
+    background: transparent;
+    padding: 1;
+}
+
+#trust-dialog-title {
+    width: 100%;
+    height: auto;
+    text-style: bold;
+    color: ansi_yellow;
+    text-align: center;
+    margin-bottom: 1;
+}
+
+#trust-dialog-path {
+    width: 100%;
+    height: auto;
+    color: ansi_blue;
+    text-align: center;
+    text-wrap: wrap;
+    margin-bottom: 1;
+}
+
+#trust-dialog-message {
+    width: 100%;
+    height: auto;
+    color: ansi_default;
+    text-align: center;
+    text-wrap: wrap;
+    margin-bottom: 1;
+}
+
+#trust-options-container {
+    width: 100%;
+    height: auto;
+    align: center middle;
+    margin-bottom: 1;
+}
+
+.trust-option {
+    height: auto;
+    width: auto;
+    color: ansi_default;
+    margin: 0 3;
+    content-align: center middle;
+}
+
+.trust-cursor-selected {
+    color: ansi_default;
+    text-style: bold;
+}
+
+.trust-option-selected {
+    color: ansi_default;
+}
+
+.trust-dialog-help {
+    width: 100%;
+    height: auto;
+    color: ansi_bright_black;
+    text-align: center;
+    margin-bottom: 1;
+}
+
+.trust-dialog-save-info {
+    width: 100%;
+    height: auto;
+    color: ansi_bright_black;
+    text-align: center;
+    text-style: italic;
+    text-wrap: wrap;
+    margin-bottom: 1;
+}

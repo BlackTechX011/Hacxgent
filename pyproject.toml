@@ -1,0 +1,169 @@
+[project]
+name = "hacxgent"
+version = "1.0.0"
+description = "A professional-grade, open-source CLI coding agent for local codebase interaction."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [{ name = "BlackTechX011" }]
+keywords = [
+    "ai",
+    "cli",
+    "coding-assistant",
+    "hacxgent",
+    "llm",
+    "developer-tools",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "agent-client-protocol==0.8.0",
+    "anyio>=4.12.0",
+    "httpx>=0.28.1",
+    "mcp>=1.14.0",
+    "pexpect>=4.9.0",
+    "packaging>=24.1",
+    "pydantic>=2.12.4",
+    "pydantic-settings>=2.12.0",
+    "pyyaml>=6.0.0",
+    "python-dotenv>=1.0.0",
+    "rich>=14.0.0",
+    "textual>=1.0.0",
+    "tomli-w>=1.2.0",
+    "watchfiles>=1.1.1",
+    "pyperclip>=1.11.0",
+    "textual-speedups>=0.2.1",
+    "tree-sitter>=0.25.2",
+    "tree-sitter-bash>=0.25.1",
+    "keyring>=25.6.0",
+    "cryptography>=44.0.0",
+    "zstandard>=0.25.0",
+    "gitpython>=3.1.46",
+    "giturlparse>=0.14.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/BlackTechX011/hacxgent"
+Repository = "https://github.com/BlackTechX011/hacxgent"
+Issues = "https://github.com/BlackTechX011/hacxgent/issues"
+Documentation = "https://github.com/BlackTechX011/hacxgent#readme"
+
+
+[build-system]
+requires = ["hatchling", "hatch-vcs", "editables"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+include = ["hacxgent/"]
+
+
+[project.scripts]
+hacxgent = "hacxgent.cli.entrypoint:main"
+hacxgent-acp = "hacxgent.acp.entrypoint:main"
+
+
+[tool.uv]
+package = true
+required-version = ">=0.8.0"
+
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "pyright>=1.1.403",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=1.2.0",
+    "pytest-timeout>=2.4.0",
+    "pytest-textual-snapshot>=1.1.0",
+    "respx>=0.22.0",
+    "ruff>=0.14.5",
+    "twine>=5.0.0",
+    "typos>=1.34.0",
+    "vulture>=2.14",
+    "pytest-xdist>=3.8.0",
+    "debugpy>=1.8.19",
+]
+
+build = ["pyinstaller>=6.17.0"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+reportMissingTypeStubs = false
+reportPrivateImportUsage = false
+include = ["hacxgent/**/*.py", "tests/**/*.py"]
+venvPath = "."
+venv = ".venv"
+
+[tool.ruff]
+include = ["hacxgent/**/*.py", "tests/**/*.py"]
+line-length = 88
+target-version = "py312"
+preview = true
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "I",
+    "D2",
+    "UP",
+    "TID",
+    "ANN",
+    "PLR",
+    "B0",
+    "B905",
+    "DOC102",
+    "RUF022",
+    "RUF010",
+    "RUF012",
+    "RUF019",
+    "RUF100",
+]
+ignore = ["D203", "D205", "D213", "ANN401", "PLR6301"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN", "PLR"]
+# Textual parent classes don't use ClassVar, so we can't either without breaking pyright
+"hacxgent/cli/textual_ui/ansi_markdown.py" = ["RUF012"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = ["hacxgent"]
+force-sort-within-sections = true
+split-on-trailing-comma = true
+combine-as-imports = true
+force-wrap-aliases = false
+order-by-type = true
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.pylint]
+max-statements = 50
+max-branches = 15
+max-locals = 15
+max-args = 9
+max-returns = 6
+max-nested-blocks = 4
+
+[tool.vulture]
+ignore_decorators = ["@*"]
+
+[tool.pytest.ini_options]
+addopts = "-vvvv -q -n auto --durations=10 --import-mode=importlib --maxschedchunk=1"
+timeout = 10

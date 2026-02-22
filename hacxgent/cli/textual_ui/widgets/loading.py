@@ -1,0 +1,186 @@
+from __future__ import annotations
+
+from collections.abc import Iterator
+from contextlib import contextmanager
+from datetime import datetime
+import random
+from time import time
+from typing import ClassVar
+
+from textual.app import ComposeResult
+from textual.containers import Horizontal
+from textual.widgets import Static
+
+from hacxgent.cli.textual_ui.widgets.no_markup_static import NoMarkupStatic
+from hacxgent.cli.textual_ui.widgets.spinner import SpinnerMixin, SpinnerType
+
+
+def _format_elapsed(seconds: int) -> str:
+    if seconds < 60:  # noqa: PLR2004
+        return f"{seconds}s"
+
+    minutes, secs = divmod(seconds, 60)
+    if minutes < 60:  # noqa: PLR2004
+        return f"{minutes}m{secs}s"
+
+    hours, mins = divmod(minutes, 60)
+    return f"{hours}h{mins}m{secs}s"
+
+
+class LoadingWidget(SpinnerMixin, Static):
+    TARGET_COLORS = ("#00BFFF", "#00CED1", "#48D1CC", "#40E0D0", "#7FFFD4")
+    SPINNER_TYPE = SpinnerType.SNAKE
+
+    EASTER_EGGS: ClassVar[list[str]] = [
+        "Hacking the mainframe",
+        "Analyzing code patterns",
+        "Synthesizing solutions",
+        "Optimizing algorithms",
+        "Consulting the oracle",
+        "Seeding Hacxgent intelligence",
+        "Providing expertise",
+    ]
+
+    EASTER_EGGS_HALLOWEEN: ClassVar[list[str]] = [
+        "Haunting the terminal",
+    ]
+
+    EASTER_EGGS_DECEMBER: ClassVar[list[str]] = [
+        "Wrapping logic",
+    ]
+
+    def __init__(self, status: str | None = None) -> None:
+        super().__init__(classes="loading-widget")
+        self.init_spinner()
+        self.status = status or self._get_default_status()
+        self.current_color_index = 0
+        self.transition_progress = 0
+        self._status_widget: Static | None = None
+        self.hint_widget: Static | None = None
+        self.start_time: float | None = None
+        self._last_elapsed: int = -1
+        self._paused_total: float = 0.0
+        self._pause_start: float | None = None
+
+    def _get_easter_egg(self) -> str | None:
+        EASTER_EGG_PROBABILITY = 0.10
+        if random.random() < EASTER_EGG_PROBABILITY:
+            available_eggs = list(self.EASTER_EGGS)
+
+            OCTOBER = 10
+            HALLOWEEN_DAY = 31
+            DECEMBER = 12
+            now = datetime.now()
+            if now.month == OCTOBER and now.day == HALLOWEEN_DAY:
+                available_eggs.extend(self.EASTER_EGGS_HALLOWEEN)
+            if now.month == DECEMBER:
+                available_eggs.extend(self.EASTER_EGGS_DECEMBER)
+
+            return random.choice(available_eggs)
+        return None
+
+    def _get_default_status(self) -> str:
+        return self._get_easter_egg() or "Generating"
+
+    def _apply_easter_egg(self, status: str) -> str:
+        return self._get_easter_egg() or status
+
+    def pause_timer(self) -> None:
+        if self._pause_start is None:
+            self._pause_start = time()
+
+    def resume_timer(self) -> None:
+        if self._pause_start is not None:
+            self._paused_total += time() - self._pause_start
+            self._pause_start = None
+
+    def set_status(self, status: str) -> None:
+        self.status = self._apply_easter_egg(status)
+        self._update_animation()
+
+    def compose(self) -> ComposeResult:
+        with Horizontal(classes="loading-container"):
+            self._indicator_widget = Static(
+                self._spinner.current_frame(), classes="loading-indicator"
+            )
+            yield self._indicator_widget
+
+            self._status_widget = Static("", classes="loading-status")
+            yield self._status_widget
+
+            self.hint_widget = NoMarkupStatic(
+                "(0s esc to interrupt)", classes="loading-hint"
+            )
+            yield self.hint_widget
+
+    def on_mount(self) -> None:
+        self.start_time = time()
+        self._update_animation()
+        self.start_spinner_timer()
+
+    def on_resize(self) -> None:
+        self.refresh_spinner()
+
+    def _update_spinner_frame(self) -> None:
+        if not self._is_spinning:
+            return
+        self._update_animation()
+
+    def _get_color_for_position(self, position: int) -> str:
+        current_color = self.TARGET_COLORS[self.current_color_index]
+        next_color = self.TARGET_COLORS[
+            (self.current_color_index + 1) % len(self.TARGET_COLORS)
+        ]
+        if position < self.transition_progress:
+            return next_color
+        return current_color
+
+    def _build_status_text(self) -> str:
+        parts = []
+        for i, char in enumerate(self.status):
+            color = self._get_color_for_position(1 + i)
+            parts.append(f"[{color}]{char}[/]")
+        ellipsis_start = 1 + len(self.status)
+        color_ellipsis = self._get_color_for_position(ellipsis_start)
+        parts.append(f"[{color_ellipsis}]… [/]")
+        return "".join(parts)
+
+    def _update_animation(self) -> None:
+        total_elements = 1 + len(self.status) + 1
+
+        if self._indicator_widget:
+            spinner_char = self._spinner.next_frame()
+            color = self._get_color_for_position(0)
+            self._indicator_widget.update(f"[{color}]{spinner_char}[/]")
+
+        if self._status_widget:
+            self._status_widget.update(self._build_status_text())
+
+        self.transition_progress += 1
+        if self.transition_progress > total_elements:
+            self.current_color_index = (self.current_color_index + 1) % len(
+                self.TARGET_COLORS
+            )
+            self.transition_progress = 0
+
+        if self.hint_widget and self.start_time is not None:
+            paused = self._paused_total + (
+                time() - self._pause_start if self._pause_start else 0
+            )
+            elapsed = int(time() - self.start_time - paused)
+            if elapsed != self._last_elapsed:
+                self._last_elapsed = elapsed
+                self.hint_widget.update(
+                    f"({_format_elapsed(elapsed)} esc to interrupt)"
+                )
+
+
+@contextmanager
+def paused_timer(loading_widget: LoadingWidget | None) -> Iterator[None]:
+    if loading_widget:
+        loading_widget.pause_timer()
+    try:
+        yield
+    finally:
+        if loading_widget:
+            loading_widget.resume_timer()
